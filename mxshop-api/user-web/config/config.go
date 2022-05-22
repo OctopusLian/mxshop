@@ -3,7 +3,7 @@
  * @Author: neozhang
  * @Date: 2022-05-22 18:28:08
  * @LastEditors: neozhang
- * @LastEditTime: 2022-05-22 21:25:42
+ * @LastEditTime: 2022-05-22 22:00:37
  */
 package config
 
@@ -39,10 +39,10 @@ type ServerConfig struct {
 	Tags        []string      `mapstructure:"tags" json:"tags"`
 	Port        int           `mapstructure:"port" json:"port"`
 	UserSrvInfo UserSrvConfig `mapstructure:"user_srv" json:"user_srv"`
-	JWTInfo      JWTConfig     `mapstructure:"jwt" json:"jwt"`
+	JWTInfo     JWTConfig     `mapstructure:"jwt" json:"jwt"`
 	AliSmsInfo  AliSmsConfig  `mapstructure:"sms" json:"sms"`
 	RedisInfo   RedisConfig   `mapstructure:"redis" json:"redis"`
-	// ConsulInfo  ConsulConfig  `mapstructure:"consul" json:"consul"`
+	ConsulInfo  ConsulConfig  `mapstructure:"consul" json:"consul"`
 }
 
 type NacosConfig struct {
