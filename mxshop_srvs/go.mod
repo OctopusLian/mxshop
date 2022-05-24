@@ -12,6 +12,7 @@ require (
 )
 
 require (
+	github.com/gofrs/uuid v4.2.0+incompatible
 	github.com/hashicorp/consul/api v1.12.0
 	github.com/iris-contrib/go.uuid v2.0.0+incompatible
 	github.com/nacos-group/nacos-sdk-go v1.1.1
