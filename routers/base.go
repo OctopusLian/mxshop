@@ -1,6 +1,10 @@
 package routers
 
-import "github.com/gin-gonic/gin"
+import (
+	"mxshop/api"
+
+	"github.com/gin-gonic/gin"
+)
 
 func InitBaseRouter(Router *gin.RouterGroup) {
 	BaseRouter := Router.Group("base")

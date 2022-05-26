@@ -1,11 +1,17 @@
 package api
 
 import (
+	"context"
+	"mxshop/global"
+	"mxshop/handler"
+	"mxshop/model"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator"
+	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -60,4 +66,48 @@ func HandleValidatorError(c *gin.Context, err error) {
 		"error": removeTopStruct(errs.Translate(global.Trans)),
 	})
 	return
+}
+
+func GetUserList(ctx *gin.Context) {
+	//拨号连接用户grpc服务器 跨域的问题 - 后端解决 也可以前端来解决
+	claims, _ := ctx.Get("claims")
+	currentUser := claims.(*model.CustomClaims)
+	zap.S().Infof("访问用户: %d", currentUser.ID)
+	//生成grpc的client并调用接口
+
+	pn := ctx.DefaultQuery("pn", "0")
+	pnInt, _ := strconv.Atoi(pn)
+	pSize := ctx.DefaultQuery("psize", "10")
+	pSizeInt, _ := strconv.Atoi(pSize)
+
+	var us handler.UserServer
+
+	rsp, err := us.GetUserList(context.Background(), &handler.PageInfo{
+		Pn:    uint32(pnInt),
+		PSize: uint32(pSizeInt),
+	})
+	if err != nil {
+		zap.S().Errorw("[GetUserList] 查询 【用户列表】失败")
+		HandleGrpcErrorToHttp(err, ctx)
+		return
+	}
+
+	reMap := gin.H{
+		"total": rsp.Total,
+	}
+	result := make([]interface{}, 0)
+	for _, value := range rsp.Data {
+		user := handler.UserInfoResponse{
+			Id:       value.Id,
+			NickName: value.NickName,
+			//Birthday: time.Time(time.Unix(int64(value.BirthDay), 0)).Format("2006-01-02"),
+			Birthday: handler.JsonTime(value.Birthday),
+			Gender:   value.Gender,
+			Mobile:   value.Mobile,
+		}
+		result = append(result, user)
+	}
+
+	reMap["data"] = result
+	ctx.JSON(http.StatusOK, reMap)
 }

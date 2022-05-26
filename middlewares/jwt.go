@@ -3,7 +3,7 @@ package middlewares
 import (
 	"errors"
 	"mxshop/global"
-	"mxshop/models"
+	"mxshop/model"
 	"net/http"
 	"time"
 
@@ -64,14 +64,14 @@ func NewJWT() *JWT {
 }
 
 // 创建一个token
-func (j *JWT) CreateToken(claims models.CustomClaims) (string, error) {
+func (j *JWT) CreateToken(claims model.CustomClaims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(j.SigningKey)
 }
 
 // 解析 token
-func (j *JWT) ParseToken(tokenString string) (*models.CustomClaims, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &models.CustomClaims{}, func(token *jwt.Token) (i interface{}, e error) {
+func (j *JWT) ParseToken(tokenString string) (*model.CustomClaims, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &model.CustomClaims{}, func(token *jwt.Token) (i interface{}, e error) {
 		return j.SigningKey, nil
 	})
 	if err != nil {
@@ -89,7 +89,7 @@ func (j *JWT) ParseToken(tokenString string) (*models.CustomClaims, error) {
 		}
 	}
 	if token != nil {
-		if claims, ok := token.Claims.(*models.CustomClaims); ok && token.Valid {
+		if claims, ok := token.Claims.(*model.CustomClaims); ok && token.Valid {
 			return claims, nil
 		}
 		return nil, TokenInvalid
@@ -106,13 +106,13 @@ func (j *JWT) RefreshToken(tokenString string) (string, error) {
 	jwt.TimeFunc = func() time.Time {
 		return time.Unix(0, 0)
 	}
-	token, err := jwt.ParseWithClaims(tokenString, &models.CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &model.CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return j.SigningKey, nil
 	})
 	if err != nil {
 		return "", err
 	}
-	if claims, ok := token.Claims.(*models.CustomClaims); ok && token.Valid {
+	if claims, ok := token.Claims.(*model.CustomClaims); ok && token.Valid {
 		jwt.TimeFunc = time.Now
 		claims.StandardClaims.ExpiresAt = time.Now().Add(1 * time.Hour).Unix()
 		return j.CreateToken(*claims)
