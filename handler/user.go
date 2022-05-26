@@ -13,7 +13,6 @@ import (
 	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"gorm.io/gorm"
 )
 
 type UserServer struct{}
@@ -36,7 +35,7 @@ type UserInfoResponse struct {
 	Role     int      `json:"role"`
 }
 
-func ModelToRsponse(user model.User) UserInfoResponse {
+func (u *UserServer) ModelToRsponse(user model.User) UserInfoResponse {
 	//在grpc的message中字段有默认值，你不能随便赋值nil进去，容易出错
 	//这里要搞清， 哪些字段是有默认值
 	userInfoRsp := UserInfoResponse{
@@ -52,24 +51,6 @@ func ModelToRsponse(user model.User) UserInfoResponse {
 		userInfoRsp.Birthday = JsonTime(*user.Birthday)
 	}
 	return userInfoRsp
-}
-
-func Paginate(page, pageSize int) func(db *gorm.DB) *gorm.DB {
-	return func(db *gorm.DB) *gorm.DB {
-		if page == 0 {
-			page = 1
-		}
-
-		switch {
-		case pageSize > 100:
-			pageSize = 100
-		case pageSize <= 0:
-			pageSize = 10
-		}
-
-		offset := (page - 1) * pageSize
-		return db.Offset(offset).Limit(pageSize)
-	}
 }
 
 type PageInfo struct {
@@ -96,7 +77,7 @@ func (s *UserServer) GetUserList(ctx context.Context, req *PageInfo) (*UserListR
 	global.DB.Scopes(Paginate(int(req.Pn), int(req.PSize))).Find(&users)
 
 	for _, user := range users {
-		userInfoRsp := ModelToRsponse(user)
+		userInfoRsp := s.ModelToRsponse(user)
 		rsp.Data = append(rsp.Data, &userInfoRsp)
 	}
 	return rsp, nil
@@ -117,7 +98,7 @@ func (s *UserServer) GetUserByMobile(ctx context.Context, req *MobileRequest) (*
 		return nil, result.Error
 	}
 
-	userInfoRsp := ModelToRsponse(user)
+	userInfoRsp := s.ModelToRsponse(user)
 	return &userInfoRsp, nil
 }
 
@@ -136,7 +117,7 @@ func (s *UserServer) GetUserById(ctx context.Context, req *IdRequest) (*UserInfo
 		return nil, result.Error
 	}
 
-	userInfoRsp := ModelToRsponse(user)
+	userInfoRsp := s.ModelToRsponse(user)
 	return &userInfoRsp, nil
 }
 
@@ -167,7 +148,7 @@ func (s *UserServer) CreateUser(ctx context.Context, req *CreateUserInfo) (*User
 		return nil, status.Errorf(codes.Internal, result.Error.Error())
 	}
 
-	userInfoRsp := ModelToRsponse(user)
+	userInfoRsp := s.ModelToRsponse(user)
 	return &userInfoRsp, nil
 }
 
