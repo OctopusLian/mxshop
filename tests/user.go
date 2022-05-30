@@ -5,8 +5,6 @@ import (
 	"fmt"
 
 	"google.golang.org/grpc"
-
-	"mxshop/proto"
 )
 
 var userClient proto.UserClient

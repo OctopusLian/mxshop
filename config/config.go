@@ -24,6 +24,12 @@ type JWTConfig struct {
 	SigningKey string `mapstructure:"key" json:"key"`
 }
 
+type JaegerConfig struct {
+	Host string `mapstructure:"host" json:"host"`
+	Port int    `mapstructure:"port" json:"port"`
+	Name string `mapstructure:"name" json:"name"`
+}
+
 type AliSmsConfig struct {
 	ApiKey     string `mapstructure:"key" json:"key"`
 	ApiSecrect string `mapstructure:"secrect" json:"secrect"`
@@ -39,4 +45,5 @@ type ServerConfig struct {
 	AliSmsInfo  AliSmsConfig  `mapstructure:"sms" json:"sms"`
 	RedisInfo   RedisConfig   `mapstructure:"redis" json:"redis"`
 	MysqlInfo   MysqlConfig   `mapstructure:"mysql" json:"mysql"`
+	JaegerInfo  JaegerConfig  `mapstructure:"jaeger" json:"jaeger"`
 }
