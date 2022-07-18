@@ -3,7 +3,7 @@
  * @Author: neozhang
  * @Date: 2022-07-18 22:55:48
  * @LastEditors: neozhang
- * @LastEditTime: 2022-07-18 22:56:00
+ * @LastEditTime: 2022-07-18 22:58:51
  */
 package api
 
@@ -45,7 +45,7 @@ func HandleGrpcErrorToHttp(err error, c *gin.Context) {
 				})
 			case codes.Unavailable:
 				c.JSON(http.StatusInternalServerError, gin.H{
-					"msg": "服务不可用",
+					"msg": "用户服务不可用",
 				})
 			default:
 				c.JSON(http.StatusInternalServerError, gin.H{

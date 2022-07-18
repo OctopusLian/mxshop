@@ -44,12 +44,6 @@ type CategoryBriefInfoResponse struct {
 	Name string `json:"name,omitempty"`
 }
 
-type BrandInfoResponse struct {
-	Id   int32  `json:"id,omitempty"`
-	Name string `json:"name,omitempty"`
-	Logo string `json:"logo,omitempty"`
-}
-
 func (s *GoodsServer) ModelToResponse(goods model.Goods) GoodsInfoResponse {
 	return GoodsInfoResponse{
 		Id:              goods.ID,
@@ -181,10 +175,10 @@ func (s *GoodsServer) GoodsList(ctx context.Context, req *GoodsFilterRequest) (*
 	}
 
 	goodsIds := make([]int32, 0)
-	goodsListResponse.Total = int32(result.Hits.TotalHits.Value)
+	goodsListResponse.Total = int32(result.Hits.TotalHits)
 	for _, value := range result.Hits.Hits {
 		goods := model.EsGoods{}
-		_ = json.Unmarshal(value.Source, &goods)
+		_ = json.Unmarshal(*value.Source, &goods)
 		goodsIds = append(goodsIds, goods.ID)
 	}
 

@@ -234,7 +234,7 @@ func GetUserDetail(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, gin.H{
 		"name":     rsp.NickName,
-		"birthday": time.Unix(int64(rsp.BirthDay), 0).Format("2006-01-02"),
+		"birthday": time.Unix(int64(rsp.Birthday), 0).Format("2006-01-02"),
 		"gender":   rsp.Gender,
 		"mobile":   rsp.Mobile,
 	})

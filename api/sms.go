@@ -1,7 +1,6 @@
 package api
 
 import (
-	"context"
 	"fmt"
 	"math/rand"
 	"mxshop/forms"
@@ -62,7 +61,7 @@ func SendSms(ctx *gin.Context) {
 	rdb := redis.NewClient(&redis.Options{
 		Addr: fmt.Sprintf("%s:%d", global.ServerConfig.RedisInfo.Host, global.ServerConfig.RedisInfo.Port),
 	})
-	rdb.Set(context.Background(), sendSmsForm.Mobile, smsCode, time.Duration()*time.Second)
+	rdb.Set(sendSmsForm.Mobile, smsCode, time.Duration(global.ServerConfig.RedisInfo.Expire)*time.Second)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"msg": "发送成功",

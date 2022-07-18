@@ -1,4 +1,4 @@
-host: '192.168.0.104'
+host: '127.0.0.1'
 port: 8849
 # namespace: '6af9810f-2e08-4e9e-ab52-ae2868fe5fcc'
 # user: 'nacos'
