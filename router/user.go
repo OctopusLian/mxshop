@@ -3,9 +3,9 @@
  * @Author: neozhang
  * @Date: 2022-05-26 23:00:30
  * @LastEditors: neozhang
- * @LastEditTime: 2022-05-26 23:00:32
+ * @LastEditTime: 2022-07-18 22:53:12
  */
-package routers
+package router
 
 import (
 	"mxshop/api"
