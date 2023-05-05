@@ -6,10 +6,10 @@ import (
 )
 
 type BaseModel struct {
-	ID        int32     `gorm:"primarykey"`
-	CreatedAt time.Time `gorm:"column:add_time"`
-	UpdatedAt time.Time `gorm:"column:update_time"`
-	DeletedAt gorm.DeletedAt
+	ID        int32          `gorm:"primarykey"`
+	CreatedAt time.Time      `gorm:"column:add_time"`
+	UpdatedAt time.Time      `gorm:"column:update_time"`
+	DeletedAt gorm.DeletedAt `gorm:"index"` // 使用指针类型
 	IsDeleted bool
 }
 
