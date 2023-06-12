@@ -53,9 +53,9 @@ func InitConfig() {
 		NotLoadCacheAtStart: true,
 		LogDir:              "tmp/nacos/log",
 		CacheDir:            "tmp/nacos/cache",
-		RotateTime:          "1h",
-		MaxAge:              3,
-		LogLevel:            "debug",
+		//RotateTime:          "1h",
+		//MaxAge:              3,
+		LogLevel: "debug",
 	}
 
 	configClient, err := clients.CreateConfigClient(map[string]interface{}{
@@ -80,5 +80,4 @@ func InitConfig() {
 		zap.S().Fatalf("读取nacos配置失败： %s", err.Error())
 	}
 	fmt.Println(&global.ServerConfig)
-
 }

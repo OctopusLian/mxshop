@@ -5,17 +5,12 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
-	"github.com/nacos-group/nacos-sdk-go/inner/uuid"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"mxshop-api/user-web/global"
 	"mxshop-api/user-web/initialize"
 	"mxshop-api/user-web/utils"
-	"mxshop-api/user-web/utils/register/consul"
 	myvalidator "mxshop-api/user-web/validator"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 func main() {
@@ -56,12 +51,12 @@ func main() {
 	}
 
 	//服务注册
-	register_client := consul.NewRegistryClient(global.ServerConfig.ConsulInfo.Host, global.ServerConfig.ConsulInfo.Port)
-	serviceId := fmt.Sprintf("%s", uuid.UUID{})
-	err := register_client.Register(global.ServerConfig.Host, global.ServerConfig.Port, global.ServerConfig.Name, global.ServerConfig.Tags, serviceId)
-	if err != nil {
-		zap.S().Panic("服务注册失败:", err.Error())
-	}
+	//registerClient := consul.NewRegistryClient(global.ServerConfig.ConsulInfo.Host, global.ServerConfig.ConsulInfo.Port)
+	//serviceId := fmt.Sprintf("%s", uuid.UUID{})
+	//err := registerClient.Register(global.ServerConfig.Host, global.ServerConfig.Port, global.ServerConfig.Name, global.ServerConfig.Tags, serviceId)
+	//if err != nil {
+	//	zap.S().Panic("服务注册失败:", err.Error())
+	//}
 
 	/*
 		1. S()可以获取一个全局的sugar，可以让我们自己设置一个全局的logger
@@ -74,7 +69,7 @@ func main() {
 	}
 
 	//接收终止信号
-	quit := make(chan os.Signal)
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	<-quit
+	//quit := make(chan os.Signal)
+	//signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	//<-quit
 }

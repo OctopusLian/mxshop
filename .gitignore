@@ -2,3 +2,12 @@ go.sum
 
 .idea/
 .vscode/
+
+mxshop-api/.idea/
+mxshop-api/tmp
+mxshop-api/go.sum
+
+mxshop_srvs/.idea/
+mxshop_srvs/go.sum
+
+*.log
