@@ -11,3 +11,5 @@ mxshop_srvs/.idea/
 mxshop_srvs/go.sum
 
 *.log
+
+mxshop_srvs/user_srv/user_srv
