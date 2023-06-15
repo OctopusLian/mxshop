@@ -6,6 +6,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/go-playground/validator/v10"
 	"github.com/go-redis/redis/v8"
+	"github.com/hashicorp/consul/api"
 	"mxshop-api/user-web/middlewares"
 	"mxshop-api/user-web/models"
 	"net/http"
@@ -77,6 +78,23 @@ func HandleValidatorError(c *gin.Context, err error) {
 }
 
 func GetUserList(ctx *gin.Context) {
+	// 从注册中心获取到用户服务的信息
+	cfg := api.DefaultConfig()
+	cfg.Address = fmt.Sprintf("%s:%d", global.ServerConfig.ConsulInfo.Host,
+		global.ServerConfig.ConsulInfo.Port)
+	client, err := api.NewClient(cfg)
+	if err != nil {
+		panic(err)
+	}
+
+	data, err := client.Agent().ServicesWithFilter(`Service == "user-web"`)
+	if err != nil {
+		panic(err)
+	}
+	for key, _ := range data {
+		fmt.Println(key)
+	}
+
 	//拨号连接用户grpc服务器 跨域的问题 - 后端解决 也可以前端来解决
 	claims, _ := ctx.Get("claims")
 	currentUser := claims.(*models.CustomClaims)

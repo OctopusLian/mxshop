@@ -50,14 +50,6 @@ func main() {
 		})
 	}
 
-	//服务注册
-	//registerClient := consul.NewRegistryClient(global.ServerConfig.ConsulInfo.Host, global.ServerConfig.ConsulInfo.Port)
-	//serviceId := fmt.Sprintf("%s", uuid.UUID{})
-	//err := registerClient.Register(global.ServerConfig.Host, global.ServerConfig.Port, global.ServerConfig.Name, global.ServerConfig.Tags, serviceId)
-	//if err != nil {
-	//	zap.S().Panic("服务注册失败:", err.Error())
-	//}
-
 	/*
 		1. S()可以获取一个全局的sugar，可以让我们自己设置一个全局的logger
 		2. 日志是分级别的，debug， info ， warn， error， fetal
@@ -68,8 +60,4 @@ func main() {
 		zap.S().Panic("启动失败:", err.Error())
 	}
 
-	//接收终止信号
-	//quit := make(chan os.Signal)
-	//signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	//<-quit
 }
