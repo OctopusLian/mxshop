@@ -1,0 +1,16 @@
+syntax = "proto3";
+option go_package = ".;proto";
+package proto;
+service Greeter {
+    rpc SayHello (HelloRequest) returns (HelloReply);
+}
+//将 sessionid放入 放入cookie中 http协议
+message HelloRequest {
+    string name = 1;
+}
+
+message HelloReply {
+    string message = 1;
+}
+
+//go语言中是生成一个文件， 也就只有python会生成两个文件
