@@ -6,7 +6,7 @@ import (
 	"mxshop_srvs/user_srv/global"
 )
 
-// 从Yaml文件中读取配置信息
+// GetEnvInfo 从Yaml文件中读取配置信息
 func GetEnvInfo(env string) bool {
 	viper.AutomaticEnv()
 	return viper.GetBool(env)
