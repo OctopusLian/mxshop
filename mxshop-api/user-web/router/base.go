@@ -11,5 +11,4 @@ func InitBaseRouter(Router *gin.RouterGroup) {
 		BaseRouter.GET("captcha", api.GetCaptcha)
 		BaseRouter.POST("send_sms", api.SendSms)
 	}
-
 }

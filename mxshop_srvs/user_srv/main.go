@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/hashicorp/consul/api"
+	"github.com/satori/go.uuid"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
@@ -57,9 +58,11 @@ func main() {
 	// 生成注册对象
 	registration := new(api.AgentServiceRegistration)
 	registration.Name = global.ServerConfig.Name
-	registration.ID = global.ServerConfig.Name
+	serviceID := fmt.Sprintf("%s", uuid.NewV4())
+	registration.ID = serviceID
 	registration.Port = *Port
 	registration.Tags = []string{"mxshop", "neozhang", "user", "srv"}
+	registration.Address = "127.0.0.1"
 	registration.Check = check
 
 	err = client.Agent().ServiceRegister(registration)
