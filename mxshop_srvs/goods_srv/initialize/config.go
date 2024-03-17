@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 
-	"mxshop_srvs/user_srv/global"
+	"mxshop_srvs/goods_srv/global"
 )
 
 func GetEnvInfo(env string) bool {
@@ -23,9 +23,9 @@ func InitConfig() {
 	//从配置文件中读取出对应的配置
 	debug := GetEnvInfo("MXSHOP_DEBUG")
 	configFilePrefix := "config"
-	configFileName := fmt.Sprintf("user_srv/%s-pro.yaml", configFilePrefix)
+	configFileName := fmt.Sprintf("goods_srv/%s-pro.yaml", configFilePrefix)
 	if debug {
-		configFileName = fmt.Sprintf("user_srv/%s-debug.yaml", configFilePrefix)
+		configFileName = fmt.Sprintf("goods_srv/%s-debug.yaml", configFilePrefix)
 	}
 
 	v := viper.New()
@@ -54,9 +54,9 @@ func InitConfig() {
 		NotLoadCacheAtStart: true,
 		LogDir:              "tmp/nacos/log",
 		CacheDir:            "tmp/nacos/cache",
-		//RotateTime:          "1h",
-		//MaxAge:              3,
-		LogLevel: "debug",
+		RotateTime:          "1h",
+		MaxAge:              3,
+		LogLevel:            "debug",
 	}
 
 	configClient, err := clients.CreateConfigClient(map[string]interface{}{
