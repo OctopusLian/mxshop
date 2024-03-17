@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
-
+	"github.com/gin-gonic/gin/binding"
+	ut "github.com/go-playground/universal-translator"
+	"github.com/go-playground/validator/v10"
 	"os"
 	"os/signal"
 	"syscall"
@@ -11,10 +13,11 @@ import (
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 
-	"mxshop-api/goods-web/global"
-	"mxshop-api/goods-web/initialize"
-	"mxshop-api/goods-web/utils"
-	"mxshop-api/goods-web/utils/register/consul"
+	"mxshop-api/order-web/global"
+	"mxshop-api/order-web/initialize"
+	"mxshop-api/order-web/utils"
+	"mxshop-api/order-web/utils/register/consul"
+	myvalidator "mxshop-api/order-web/validator"
 )
 
 func main() {
@@ -33,27 +36,33 @@ func main() {
 	//5. 初始化srv的连接
 	initialize.InitSrvConn()
 
-	//6.初始化sentinel
-	initialize.InitSentinel()
-
 	viper.AutomaticEnv()
 	//如果是本地开发环境端口号固定，线上环境启动获取端口号
 	debug := viper.GetBool("MXSHOP_DEBUG")
-	//debug = false
 	if !debug {
 		port, err := utils.GetFreePort()
 		if err == nil {
 			global.ServerConfig.Port = port
 		}
 	}
-	//Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0
-	//scrapy requests
-	//Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36
+
 	/*
 		1. S()可以获取一个全局的sugar，可以让我们自己设置一个全局的logger
 		2. 日志是分级别的，debug， info ， warn， error， fetal
 		3. S函数和L函数很有用， 提供了一个全局的安全访问logger的途径
 	*/
+
+	//注册验证器
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		_ = v.RegisterValidation("mobile", myvalidator.ValidateMobile)
+		_ = v.RegisterTranslation("mobile", global.Trans, func(ut ut.Translator) error {
+			return ut.Add("mobile", "{0} 非法的手机号码!", true) // see universal-translator for details
+		}, func(ut ut.Translator, fe validator.FieldError) string {
+			t, _ := ut.T("mobile", fe.Field())
+			return t
+		})
+	}
+
 	register_client := consul.NewRegistryClient(global.ServerConfig.ConsulInfo.Host, global.ServerConfig.ConsulInfo.Port)
 	serviceId := fmt.Sprintf("%s", uuid.NewV4())
 	err := register_client.Register(global.ServerConfig.Host, global.ServerConfig.Port, global.ServerConfig.Name, global.ServerConfig.Tags, serviceId)
