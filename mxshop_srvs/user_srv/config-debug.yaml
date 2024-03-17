@@ -1,5 +1,5 @@
 host: '192.168.0.104'
-port: 8849
+port: 8848
 namespace: '6af9810f-2e08-4e9e-ab52-ae2868fe5fcc'
 user: 'nacos'
 password: 'nacos'

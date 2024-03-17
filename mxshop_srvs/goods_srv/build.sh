@@ -1,4 +1,4 @@
-echo "开始构建"
+echo "开始构建 goods_srv"
 export GOPATH=$WORKSPACE/..
 export PATH=$PATH:$GOROOT/bin
 
@@ -16,4 +16,4 @@ cp goods_srv/config-pro.yaml goods_srv/target/goods_srv/config-pro.yaml
 
 cd $WORKSPACE
 go build -o goods_srv/target/main goods_srv/main.go
-echo "构建结束2"
+echo "构建结束 goods_srv"

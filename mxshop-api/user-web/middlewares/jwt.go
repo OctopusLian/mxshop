@@ -50,10 +50,10 @@ type JWT struct {
 }
 
 var (
-	TokenExpired     = errors.New("Token is expired")
-	TokenNotValidYet = errors.New("Token not active yet")
-	TokenMalformed   = errors.New("That's not even a token")
-	TokenInvalid     = errors.New("Couldn't handle this token:")
+	TokenExpired     = errors.New("token is expired")
+	TokenNotValidYet = errors.New("token not active yet")
+	TokenMalformed   = errors.New("that's not even a token")
+	TokenInvalid     = errors.New("couldn't handle this token")
 )
 
 func NewJWT() *JWT {
@@ -62,19 +62,20 @@ func NewJWT() *JWT {
 	}
 }
 
-// 创建一个token
+// CreateToken 创建一个token
 func (j *JWT) CreateToken(claims models.CustomClaims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(j.SigningKey)
 }
 
-// 解析 token
+// ParseToken 解析token
 func (j *JWT) ParseToken(tokenString string) (*models.CustomClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &models.CustomClaims{}, func(token *jwt.Token) (i interface{}, e error) {
 		return j.SigningKey, nil
 	})
 	if err != nil {
-		if ve, ok := err.(*jwt.ValidationError); ok {
+		var ve *jwt.ValidationError
+		if errors.As(err, &ve) {
 			if ve.Errors&jwt.ValidationErrorMalformed != 0 {
 				return nil, TokenMalformed
 			} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
