@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/consul/api"
-)
+	)
 
-type Registry struct {
+type Registry struct{
 	Host string
 	Port int
 }
@@ -16,14 +16,14 @@ type RegistryClient interface {
 	DeRegister(serviceId string) error
 }
 
-func NewRegistryClient(host string, port int) RegistryClient {
+func NewRegistryClient(host string, port int) RegistryClient{
 	return &Registry{
 		Host: host,
 		Port: port,
 	}
 }
 
-func (r *Registry) Register(address string, port int, name string, tags []string, id string) error {
+func (r *Registry)Register(address string, port int, name string, tags []string, id string) error {
 	cfg := api.DefaultConfig()
 	cfg.Address = fmt.Sprintf("%s:%d", r.Host, r.Port)
 
@@ -33,9 +33,9 @@ func (r *Registry) Register(address string, port int, name string, tags []string
 	}
 	//生成对应的检查对象
 	check := &api.AgentServiceCheck{
-		HTTP:                           fmt.Sprintf("http://%s:%d/health", address, port),
-		Timeout:                        "5s",
-		Interval:                       "5s",
+		HTTP: fmt.Sprintf("http://%s:%d/health", address, port),
+		Timeout: "5s",
+		Interval: "5s",
 		DeregisterCriticalServiceAfter: "10s",
 	}
 
@@ -55,7 +55,7 @@ func (r *Registry) Register(address string, port int, name string, tags []string
 	return nil
 }
 
-func (r *Registry) DeRegister(serviceId string) error {
+func (r *Registry)DeRegister(serviceId string) error{
 	cfg := api.DefaultConfig()
 	cfg.Address = fmt.Sprintf("%s:%d", r.Host, r.Port)
 

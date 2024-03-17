@@ -30,10 +30,10 @@ func TestGetUserList() {
 		panic(err)
 	}
 	for _, user := range rsp.Data {
-		fmt.Println(user.Mobile, user.NickName, user.Password)
-		checkRsp, err := userClient.CheckPassword(context.Background(), &proto.CheckPasswordInfo{
+		fmt.Println(user.Mobile, user.NickName, user.PassWord)
+		checkRsp, err := userClient.CheckPassWord(context.Background(), &proto.PasswordCheckInfo{
 			Password:          "admin123",
-			EncryptedPassword: user.Password,
+			EncryptedPassword: user.PassWord,
 		})
 		if err != nil {
 			panic(err)
@@ -45,7 +45,7 @@ func TestGetUserList() {
 func TestCreateUser() {
 	for i := 0; i < 10; i++ {
 		rsp, err := userClient.CreateUser(context.Background(), &proto.CreateUserInfo{
-			NickName: fmt.Sprintf("neo%d", i),
+			NickName: fmt.Sprintf("bobby%d", i),
 			Mobile:   fmt.Sprintf("1878222222%d", i),
 			PassWord: "admin123",
 		})
@@ -58,8 +58,8 @@ func TestCreateUser() {
 
 func main() {
 	Init()
-	TestCreateUser()
-	//TestGetUserList()
+	//TestCreateUser()
+	TestGetUserList()
 
 	conn.Close()
 }
