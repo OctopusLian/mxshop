@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 
-	"mxshop-api/userop-web/global"
+	"mxshop-api/oss-web/global"
 )
 
 func GetEnvInfo(env string) bool {
@@ -22,9 +22,9 @@ func GetEnvInfo(env string) bool {
 func InitConfig() {
 	debug := GetEnvInfo("MXSHOP_DEBUG")
 	configFilePrefix := "config"
-	configFileName := fmt.Sprintf("userop-web/%s-pro.yaml", configFilePrefix)
+	configFileName := fmt.Sprintf("oss-web/%s-pro.yaml", configFilePrefix)
 	if debug {
-		configFileName = fmt.Sprintf("userop-web/%s-debug.yaml", configFilePrefix)
+		configFileName = fmt.Sprintf("oss-web/%s-debug.yaml", configFilePrefix)
 	}
 
 	v := viper.New()
